@@ -1,0 +1,16 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<header>
+    <span class="avatar"><img src="{{ url_for('static', filename='images/avatar.jpg') }}" width="125" alt="KekikAkademi"/></span>
+    <h1>{{ baslik }}</h1>
+    <p>{{ icerik }}</p>
+</header>
+
+<hr />
+<div class="fields">
+    <p><a href="kayit_ol" class="button"><i class="fa fa-key" aria-hidden="true"></i> Kayıt Ol</a></p>
+    <p><a href="giris_yap" class="button"><i class="fa solid fa-sign-in-alt" aria-hidden="true"></i> Giriş Yap</a></p>
+</div>
+
+{% endblock %}

@@ -1,0 +1,225 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+<h2><i class="fa fa-users-cog" aria-hidden="true"></i> {{ baslik }}</h2>
+
+<hr />
+
+ {% if hata %}
+    <div class="alert alert-danger" role="alert">
+        {{ hata }}
+        {% if bot_adres %}
+            <p><a href='https://t.me/BinanceCexaBot?start=parameter' target='_blank' style='font-weight: bold; color:#721c24'>@BinanceCexaBot</a></p>
+        {% endif %}
+    </div>
+    <hr />
+ {% endif %}
+
+<form method="POST" action="#">
+    <div class="fields">
+        <h3>PlusBinance API Bilgileri</h3>
+        <div class="field">
+            <input disabled type="text" name="api_key" id="api_key" value="{{ api_key if api_key is not none }}" placeholder="API Key" />
+        </div>
+        <div class="field">
+            <input disabled type="text" name="api_secret" id="api_secret" value="{{ api_secret if api_secret is not none }}" placeholder="Secret Key" />
+        </div>
+    </div>
+    <hr />
+    <div class="fields">
+        <h3>Parite Seçimi</h3>
+        <div class="field">
+            {% for parite in pariteler %}
+              <input type="checkbox" class="pariteler" id="{{ parite }}" name="{{ parite }}" value="{{ parite }}" checked/><label for="{{ parite }}">{{ parite }}</label>
+            {% endfor %}
+
+            {% for kalan in kalanlar %}
+              <input type="checkbox" class="pariteler" id="{{ kalan }}" name="{{ kalan }}" value="{{ kalan }}" /><label for="{{ kalan }}">{{ kalan }}</label>
+            {% endfor %}
+        </div>
+    </div>
+    <hr />    
+    <div class="fields">
+        <h3>Spot Alış Ayarı</h3>
+        <div class="alert alert-info" role="alert">
+            Bu seçimi işlem yapıcağınız döviz için yapıyorsunuz!
+        </div>
+        <div class="field">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="doviz_tip" id="yuzde" value="yuzde" {{ 'checked' if doviz_tip is none }} {{ 'checked' if doviz_tip == 'yuzde' }}>
+                <label class="form-check-label" for="yuzde">
+                    Yüzdelik
+                </label>
+                <input class="form-check-input" type="radio" name="doviz_tip" id="miktar" value="miktar" {{ 'checked' if doviz_tip == 'miktar' }}>
+                <label class="form-check-label" for="miktar">
+                    Miktar
+                </label>
+            </div>
+        </div>
+        <div class="input-group" id="tip_inputlar">
+            <input class="ozel" type="number" name="miktar" id="rakam" min="0" value="{{ miktar if miktar is not none }}" aria-describedby="bar"/>
+            <span class="input-group-text" id="bar"></span>
+        </div>
+    </div>
+    <hr />
+    <div class="fields">
+        <h3>Strateji belirleyin</h3>
+        <div class="field">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="satis_tip" id="sinyal" value="sinyal" {{ 'checked' if satis_tip is none }} {{ 'checked' if satis_tip == 'sinyal' }}>
+                <label class="form-check-label" for="sinyal">
+                    Sinyal
+                </label>
+                <input class="form-check-input" type="radio" name="satis_tip" id="spot" value="spot" {{ 'checked' if satis_tip == 'spot' }}>
+                <label class="form-check-label" for="spot">
+                    Spot
+                </label>
+                <input class="form-check-input" type="radio" name="satis_tip" id="oco" value="oco" {{ 'checked' if satis_tip == 'oco' }}>
+                <label class="form-check-label" for="oco">
+                    OCO
+                </label>
+            </div>
+        </div>
+        <div id="uyarilar" style="margin-top:10px"></div>
+        <div class="input-group" id="satis_tip_inputlar"></div>
+        <div class="input-group" id="oco_kar"></div>
+        <div class="input-group" id="oco_zarar"></div>
+        <!-- <input class="ozel" type="number" name="emir_yuzde" id="emir_yuzde" value="{{ emir_yuzde if emir_yuzde is not none }}" placeholder="Satış Emri Yüzdesi" aria-describedby="emir_yuzde_bar"/>
+        <span class="input-group-text" id="emir_yuzde_bar">%</span> -->
+    </div>
+    <hr />
+    <div class="fields">
+        <h3>Telegram Bilgileri (İsteğe Bağlı)</h3>
+        <p><a href='https://t.me/BinanceCexaBot?start=parameter' target='_blank' style='font-weight: bold; color:#EE8013'>@BinanceCexaBot</a> aracılığıyla ID'nizi öğrenebilirsiniz..</p>
+        <div class="field">
+            <input type="text" name="telegram" id="telegram" value="{{ telegram if telegram is not none }}" placeholder="Telegram ID" />
+        </div>
+    </div>
+    <ul class="actions special">
+        <li><button type='submit'><i class="fa fa-key" aria-hidden="true"></i> Kaydet</button></li>
+    </ul>
+    <ul class="actions special">
+        {% if monitor %}
+        <li><a href="/monitor" class="button"><i class="fa solid fa-eye" aria-hidden="true"></i> Monitor</a></li>
+        {% endif %}
+        <li><a href="/cikis_yap" class="button"><i class="fa solid fa-sign-out-alt" aria-hidden="true"></i> Çıkış Yap</a></li>
+    </ul>
+</form>
+
+<script>
+    var yuzde = document.getElementById("yuzde").checked;
+    var miktar = document.getElementById("miktar").checked;
+    var sinyal = document.getElementById("sinyal").checked;
+    var spot = document.getElementById("spot").checked;
+    var oco = document.getElementById("oco").checked;
+
+    var limit = {{ 10 if vip else 1 }};
+    $('input.pariteler').on('change', function(evt) {
+        if($(this).siblings(':checked').length >= limit) {
+            this.checked = false;
+        }
+    });
+
+    if ($("#rakam").val() < 0) {
+        $("#rakam").val("0")
+    }
+
+    if(yuzde){
+        $("#rakam").attr("placeholder", "Kullanılacak Dövizin Yüzdesi");
+        $("#bar").html("%");
+        $("#rakam").attr({
+            "max" : 100
+        });
+        if ($("#rakam").val() > 100) {
+            $("#rakam").val("100")
+        }
+    }else if(miktar){
+        $("#rakam").attr("placeholder", "Kullanılacak Dövizin Miktarı");
+        $("#bar").html("USDT");
+    }
+
+    $("#yuzde").on("click", () => {
+        $("#rakam").attr("placeholder", "Kullanılacak Dövizin Yüzdesi");
+        $("#bar").html("%");
+        $("#rakam").attr({
+            "max" : 100
+        });
+    })
+    $("#miktar").on("click", () => {
+        $("#rakam").attr("placeholder", "Kullanılacak Dövizin Miktarı");
+        $("#bar").html("USDT");
+        $("#rakam").attr({
+            "max" : null
+        });
+    })
+    $("#sinyal").on("click", () => {
+        $("#uyarilar").html(`<div class="alert alert-info" role="alert">
+            Algoritma Alış Satış Sinyallerine Göre Çalışır
+        </div>`);
+        $("#oco_kar").html("")
+        $("#oco_zarar").html("")
+        $("#satis_tip_inputlar").html("")
+    })
+    $("#spot").on("click", () => {
+        $("#satis_tip_inputlar").html(`
+        <input class="ozel" type="number" name="kar_yuzde" id="kar_yuzde" value="{{ kar_yuzde if kar_yuzde is not none }}" placeholder="Kâr Yüzde" aria-describedby="kar_yuzde_bar"/>
+        <span class="input-group-text" id="kar_yuzde_bar">% Kâr</span>
+        `);
+        $("#uyarilar").html(`<div class="alert alert-info" role="alert">
+            Belirlediğiniz Kâr Yüzdesi ve Satış Sinyaline Göre Çalışır
+        </div>`)
+        $("#oco_kar").html("")
+        $("#oco_zarar").html("")
+    })
+
+    $("#oco").on("click", () => {
+        $("#oco_kar").html(`
+        <input class="ozel" type="number" name="kar_yuzde" id="kar_yuzde" value="{{ kar_yuzde if kar_yuzde is not none }}" placeholder="Kâr Yüzde" aria-describedby="kar_yuzde_bar"/>
+        <span class="input-group-text" style="min-width:95px" id="kar_yuzde_bar">% Kâr</span>
+        `);
+        $("#oco_zarar").html(`
+        <input class="ozel" type="number" name="zarar_yuzde" id="zarar_yuzde" value="{{ zarar_yuzde if zarar_yuzde is not none }}" placeholder="Zarar Yüzde" aria-describedby="zarar_yuzde_bar"/>
+        <span class="input-group-text" style="max-width:95px" id="zarar_yuzde_bar">% Zarar</span>
+        `);
+        $("#uyarilar").html(`<div class="alert alert-info" role="alert">
+            Belirlediğiniz Kâr Yüzdesi ve Zarar Yüzdesine Göre Çalışır
+        </div>`)
+        $("#satis_tip_inputlar").html("")
+    })
+
+    if(sinyal){
+        $("#uyarilar").html(`<div class="alert alert-info" role="alert">
+            Algoritma Alış Satış Sinyallerine Göre Çalışır
+        </div>`);
+        $("#oco_kar").html("")
+        $("#oco_zarar").html("")
+        $("#satis_tip_inputlar").html("")
+    }else if(spot){
+        $("#satis_tip_inputlar").html(`
+        <input class="ozel" type="number" name="kar_yuzde" id="kar_yuzde" value="{{ kar_yuzde if kar_yuzde is not none }}" placeholder="Kâr Yüzde" aria-describedby="kar_yuzde_bar"/>
+        <span class="input-group-text" id="kar_yuzde_bar">% Kâr</span>
+        `);
+        $("#uyarilar").html(`<div class="alert alert-info" role="alert">
+            Belirlediğiniz Kâr Yüzdesi ve Satış Sinyaline Göre Çalışır
+        </div>`)
+        $("#oco_kar").html("")
+        $("#oco_zarar").html("")
+    }else if(oco){
+        $("#oco_kar").html(`
+        <input class="ozel" type="number" name="kar_yuzde" id="kar_yuzde" value="{{ kar_yuzde if kar_yuzde is not none }}" placeholder="Kâr Yüzde" aria-describedby="kar_yuzde_bar"/>
+        <span class="input-group-text" style="min-width:95px" id="kar_yuzde_bar">% Kâr</span>
+        `);
+        $("#oco_zarar").html(`
+        <input class="ozel" type="number" name="zarar_yuzde" id="zarar_yuzde" value="{{ zarar_yuzde if zarar_yuzde is not none }}" placeholder="Zarar Yüzde" aria-describedby="zarar_yuzde_bar"/>
+        <span class="input-group-text" style="max-width:95px" id="zarar_yuzde_bar">% Zarar</span>
+        `);
+        $("#uyarilar").html(`<div class="alert alert-info" role="alert">
+            Belirlediğiniz Kâr Yüzdesi ve Zarar Yüzdesine Göre Çalışır
+        </div>`)
+        $("#satis_tip_inputlar").html("")
+    }
+</script>
+
+{% endblock %}

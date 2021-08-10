@@ -1,0 +1,48 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<h2><i class="fa fa-users-cog" aria-hidden="true"></i> {{ baslik }}</h2>
+
+<hr />
+
+ {% if hata %}
+    <h3>{{ hata }}</h3>
+    <hr />
+ {% endif %}
+
+<form method="post" action="#">
+    <div class="fields">
+        <h3>PlusBinance API Bilgileri</h3>
+        <div class="field">
+            <input type="text" name="api_key" id="api_key" value="{{ api_key if api_key is not none }}" placeholder="API Key" />
+        </div>
+        <div class="field">
+            <input type="text" name="api_secret" id="api_secret" value="{{ api_secret if api_secret is not none }}" placeholder="Secret Key" />
+        </div>
+    </div>
+    <hr />
+    <div class="fields">
+        <h3>Emir Ayarı</h3>
+        <div class="field">
+            <input type="rakam" name="emir_yuzde" id="emir_yuzde" value="{{ emir_yuzde if emir_yuzde is not none }}" placeholder="Emir Yüzdesi" />
+        </div>
+    </div>
+    <hr />
+    <div class="fields">
+        <h3>Telegram Bilgileri (İsteğe Bağlı)</h3>
+        <div class="field">
+            <input type="text" name="telegram" id="telegram" value="{{ telegram if telegram is not none }}" placeholder="Telegram Kullanıcı Adı" value="@" />
+        </div>
+    </div>
+    <ul class="actions special">
+        <li><button type='submit'><i class="fa fa-key" aria-hidden="true"></i> Kaydet</button></li>
+    </ul>
+    <ul class="actions special">
+        {% if monitor %}
+          <li><a href="/monitor" class="button"><i class="fa solid fa-eye" aria-hidden="true"></i> Monitor</a></li>
+        {% endif %}
+        <li><a href="/cikis_yap" class="button"><i class="fa solid fa-sign-out-alt" aria-hidden="true"></i> Çıkış Yap</a></li>
+    </ul>
+</form>
+
+{% endblock %}

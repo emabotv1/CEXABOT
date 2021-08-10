@@ -1,0 +1,39 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<h2><i class="fa fa-users-cog" aria-hidden="true"></i> {{ baslik }}</h2>
+
+<hr />
+
+ {% if hata %}
+    <div class="alert alert-danger" style="color:black" role="alert">
+        <h3 style="color:black">{{ hata }}</h3>
+    </div>
+    <hr />
+ {% endif %}
+
+<form method="post" action="#">
+    <h3 >PlusBinance API Bilgileri</h3>
+    <style>
+        .not_hover:hover{
+            color:#ddd !important
+        }
+    </style>
+    <a class="button not_hover" style="font-weight: bold; background:#EE8013;color:#ddd" href="https://www.youtube.com/watch?v=kzBFpg5J_z0"><i class="fa solid fa-book" aria-hidden="true"></i> Kullanım Videosu</a>
+    <div class="fields" style="margin-top: 10px;">
+        <div class="field">
+            <input type="text" name="api_key" id="api_key" value="{{ api_key if api_key is not none }}" placeholder="API Key" />
+        </div>
+        <div class="field">
+            <input type="text" name="api_secret" id="api_secret" value="{{ api_secret if api_secret is not none }}" placeholder="Secret Key" />
+        </div>
+    </div>
+    <ul class="actions special">
+        <li><button type='submit'><i class="fa fa-key" aria-hidden="true"></i> Kaydet</button></li>
+    </ul>
+    <ul class="actions special">
+        <li><a href="/cikis_yap" class="button"><i class="fa solid fa-sign-out-alt" aria-hidden="true"></i> Çıkış Yap</a></li>
+    </ul>
+</form>
+
+{% endblock %}

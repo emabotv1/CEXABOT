@@ -1,0 +1,141 @@
+{% extends "taban.html" %}
+{% block icerik %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/monitor.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+<h2><i class="fa fa-eye" aria-hidden="true"></i> {{ baslik }}</h2>
+
+<hr />
+
+<table class="table table-bordered table-dark">
+    <tbody>
+        <tr>
+            <th scope="row">Sinyal Alınan Pariteler</th>
+            <td><input disabled value="{{ pariteler }}" id="pariteler_input"></td>
+        </tr>
+        <tr>
+            <th scope="row">Doviz Alış İşlem Tipi</th>
+            <td>{{ 'Yüzde' if doviz_tip == 'yuzde' else 'Miktar' }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Doviz Alış İşlem {{ 'Yüzdesi' if doviz_tip == 'yuzde' else 'Miktarı' }}</th>
+            <td>{{ miktar }} {{ '%' if doviz_tip == 'yuzde' else 'USDT' }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Strateji Tipi</th>
+            <td>{{ satis_tip.title() if satis_tip != 'spot' else 'Stopsuz' }}</td>
+        </tr>
+        {% if kar_yuzde %}
+        <tr>
+            <th scope="row">Kâr Yüzdesi</th>
+            <td>{{ kar_yuzde }} %</td>
+        </tr>
+        {% endif %}
+        {% if zarar_yuzde %}
+        <tr>
+            <th scope="row">Zarar Yüzdesi</th>
+            <td>{{ zarar_yuzde }} %</td>
+        </tr>
+        {% endif %}
+        {% if telegram %}
+            <tr>
+                <th scope="row">Telegram Bildirimi Gönderilecek Adres</th>
+                <td>{{ telegram }}</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<hr />
+
+<div id="console">
+    <pre class="banner">
+         _____  _           ____  _                            
+        |  __ \| |         |  _ \(_)                           
+        | |__) | |_   _ ___| |_)  _ _ __   __ _ _ __   ___ ___ 
+        |  ___/| | | | / __|  _ <| | '_ \ / _` | '_ \ / __/ _ \
+        | |    | | |_| \__ \ |_) | | | | | (_| | | | | (_|  __/
+        |_|    |_|\__,_|___/____/|_|_| |_|\__,_|_| |_|\___\___|
+    </pre>
+    <table id="console-items">
+        <tr class="line">
+            <td class="darkgreen"></td>
+            <td class="blue"></td>
+            <td class="red">İŞLEM</td>
+            <td class="green">||</td>
+            <td class="orange">PARİTE</td>
+            <td class="green">||</td>
+            <td class="cyan">COİN FİYAT</td>
+            <td class="green">||</td>
+            <td class="purple">ADET COİN</td>
+            <td class="green">||</td>
+            <td class="yellow">USDT MİKTARI</td>
+        </tr>
+        {% for log in loglar %}
+        <tr class="line">
+            <td class="darkgreen">[{{ log.tarih }}]</td>
+            <td class="blue">»</td>
+            <td class="red">{{ log.olay }}</td>
+            <td class="green">||</td>
+            <td class="orange">{{ log.parite }}</td>
+            <td class="green">||</td>
+            <td class="cyan">{{ log.tutar_coin }}</td>
+            <td class="green">||</td>
+            <td class="purple">{{ log.adet_coin }}</td>
+            <td class="green">||</td>
+            <td class="yellow">{{ log.tutar_doviz }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<hr />
+
+<ul style="margin-top: 10px;" class="actions special">
+    <li><a href="/ayar" class="button"><i class="fa solid fa-key" aria-hidden="true"></i> Ayar Güncelle</a></li>
+    <li><a href="/cikis_yap" class="button"><i class="fa solid fa-sign-out-alt" aria-hidden="true"></i> Çıkış Yap</a>
+    </li>
+</ul>
+
+<script>
+    document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+    var eldeki_veri = null;
+    setInterval(() => {
+        $.ajax({
+            type: "POST",
+            url: "/monitor",
+            success: function (data) {
+                if (data != null) {
+                    if (eldeki_veri != data.tarih) {
+                        if (data.tarih) {
+                            $('#console-items').append(`
+                                <tr class="line">
+                                    <td class="darkgreen">[` + data.tarih + `]</td>
+                                    <td class="blue">»</td>
+                                    <td class="red">` + data.olay + `</td>
+                                    <td class="green">||</td>
+                                    <td class="orange">` + data.parite + `</td>
+                                    <td class="green">||</td>
+                                    <td class="cyan">` + data.tutar_coin + `</td>
+                                    <td class="green">||</td>
+                                    <td class="purple">` + data.adet_coin + `</td>
+                                    <td class="green">||</td>
+                                    <td class="yellow">` + data.tutar_doviz + `</td>
+                                </tr>
+                            `)
+                            eldeki_veri = data.tarih
+                            // console.log(eldeki_veri);
+                            document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+                        }
+                    }
+                }
+            },
+            error: function () {
+                window.location.href = "/cikis_yap";
+            }
+        })
+    }, 2000);
+</script>
+
+{% endblock %}
