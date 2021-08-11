@@ -35,7 +35,7 @@ def ayar():
         "BTCSTUSDT",
         "AVAXUSDT",
         "DOTUSDT",
-        "SUSHİUSDT",
+        "SUSHIUSDT",
         "WAVESUSDT",
         "DOGEUSDT",
         "ATOMUSDT", 
