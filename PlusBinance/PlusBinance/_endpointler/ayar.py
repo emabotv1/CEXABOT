@@ -33,7 +33,15 @@ def ayar():
         "BNBUSDT",
         "XVSUSDT",
         "BTCSTUSDT",
-        "AVAXUSDT"
+        "AVAXUSDT",
+        "DOTUSDT",
+        "SUSHİUSDT",
+        "WAVESUSDT",
+        "DOGEUSDT",
+        "ATOMUSDT", 
+        "CHZUSDT", 
+        "SNXUSDT",
+        "EGLDUSDT"
     ]
     kalanlar = [parite for parite in hizmet_verilenler if parite not in kullanici["ayar"]["pariteler"]]
 
