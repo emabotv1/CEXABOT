@@ -26,7 +26,7 @@ son_sinyal = {
     "BTCSTUSDT": tarih(),
     "AVAXUSDT" : tarih(),
     "DOTUSDT"  : tarih(),
-    "SUSHİUSDT": tarih(),
+    "SUSHIUSDT": tarih(),
     "WAVESUSDT": tarih(),
     "DOGEUSDT" : tarih(),
     "ATOMUSDT" : tarih(),
@@ -34,7 +34,7 @@ son_sinyal = {
     "SNXUSDT"  : tarih(),
     "EGLDUSDT" : tarih()
 }
-semboller = ["CAKEUSDT","BTCUSDT","SOLUSDT","XVSUSDT","AVAXUSDT","ETHUSDT","BTCSTUSDT","LUNAUSDT","BNBUSDT","AXSUSDT"]
+semboller = ["CAKEUSDT","BTCUSDT","SOLUSDT","XVSUSDT","AVAXUSDT","ETHUSDT","BTCSTUSDT","LUNAUSDT","BNBUSDT","AXSUSDT","DOTUSDT","SUSHIUSDT","WAVESUSDT","DOGEUSDT","ATOMUSDT","CHZUSDT","SNXUSDT","EGLDUSDT"]
 
 @app.route("/webhook/<sembol>", methods=["GET", "POST"])
 def webhook_statik(sembol):
@@ -74,14 +74,6 @@ def webhook_statik(sembol):
 
                     veri = {}
                     if duzgun_veri['sinyal'] == 'AL':
-                        database.log_salla(
-                            mail        = mail,
-                            olay        = f"Sinyal » {duzgun_veri['sinyal']}",
-                            parite      = duzgun_veri['sembol'],
-                            adet_coin   = '',
-                            tutar_doviz = '',
-                            tutar_coin  = ondalik_kisalt(duzgun_veri['fiyat'])
-                        )
 
                         veri['spot_alim']   = binance_kisi.spot_alim(duzgun_veri['sembol'], kullanicilar[mail]['ayar']['doviz_tip'], int(kullanicilar[mail]['ayar']['miktar']),mail=mail)
                         if 'hata' in list(veri['spot_alim'].keys()):
@@ -144,14 +136,6 @@ def webhook_statik(sembol):
                                     tutar_coin  = veri['oco_satis_emri']['alis_sinyali']
                                 )
                     else:
-                        database.log_salla(
-                            mail        = mail,
-                            olay        = f"Sinyal » {duzgun_veri['sinyal']}",
-                            parite      = duzgun_veri['sembol'],
-                            adet_coin   = '',
-                            tutar_doviz = ondalik_kisalt(duzgun_veri['fiyat']),
-                            tutar_coin  = ''
-                        )
 
                         if kullanicilar[mail]['ayar']['satis_tip'] != 'oco':
                             veri['spot_satis'] = binance_kisi.acil_satis(duzgun_veri['sembol'],mail=mail)
