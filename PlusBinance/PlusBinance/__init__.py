@@ -5,7 +5,7 @@ from KekikTaban import KekikTaban
 taban = KekikTaban(
     baslik   = "@KekikAkademi PlusBinance",
     aciklama = "PlusBinance Başlatıldı..",
-    banner   = "PlusBinance",
+    banner   = "CexaBinance",
     girinti  = 3
 )
 
@@ -66,18 +66,21 @@ def istek_log(yanit:Response) -> Response:
         return yanit
 
     simdi = time()
-
-    if str(parse(request.headers.get('User-Agent'))).split('/')[2].strip() == 'Other':
-        cihaz = request.headers.get('User-Agent')
-    else:
-        cihaz = parse(request.headers.get('User-Agent'))
+    cihaz = "Bilinmeyen cihaz..."
+    try:
+        if str(parse(request.headers.get('User-Agent'))).split('/')[2].strip() == 'Other':
+            cihaz = request.headers.get('User-Agent')
+        else:
+            cihaz = parse(request.headers.get('User-Agent'))
+    except TypeError:
+        pass
 
     log_veri = {
         'id'     : jwt_decode(session.get('token'))['mail'] if session.get('token') else '', 
         'method' : request.method,
         'url'    : request.host_url[:-1] + request.full_path,
         # 'data'   : (request.form.to_dict()) or (loads(request.data) if request.data else None),
-        'data'   : request.data,
+        'data'   : request.data.decode('utf-8'),
         'kod'    : yanit.status_code,
         'sure'   : round(simdi - g.start, 2),
         'ip'     : request.remote_addr,

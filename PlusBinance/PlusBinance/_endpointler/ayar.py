@@ -25,6 +25,8 @@ def ayar():
 
     hizmet_verilenler = [
         "CAKEUSDT",
+        "BURGERUSDT",
+        "BAKEUSDT",
         "BTCUSDT",
         "SOLUSDT",
         "ETHUSDT",
@@ -34,7 +36,7 @@ def ayar():
         "XVSUSDT",
         "BTCSTUSDT",
         "AVAXUSDT",
-        "DOTUSDT",
+        "UNFIUSDT",
         "SUSHIUSDT",
         "WAVESUSDT",
         "DOGEUSDT",

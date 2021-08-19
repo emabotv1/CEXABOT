@@ -1,0 +1,122 @@
+{
+    "BTCUSDT": {
+        "COIN":"BTC",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "SOLUSDT": {
+        "COIN":"SOL",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "CAKEUSDT":{
+        "COIN":"CAKE",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "BURGERUSDT":{
+        "COIN":"BURGER",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "BAKEUSDT":{
+        "COIN":"BAKE",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "XVSUSDT":{
+        "COIN":"XVS",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "AVAXUSDT":{
+        "COIN":"AVAX",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "ETHUSDT":{
+        "COIN":"ETH",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "BTCSTUSDT":{
+        "COIN":"BTCST",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "LUNAUSDT":{
+        "COIN":"LUNA",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "BNBUSDT":{
+        "COIN":"BNB",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "AXSUSDT":{
+        "COIN":"AXS",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "UNFIUSDT":{
+        "COIN":"UNFI",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "SUSHIUSDT":{
+        "COIN":"SUSHİ",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "WAVESUSDT":{
+        "COIN":"WAVES",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "DOGEUSDT":{
+        "COIN":"DOGE",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "ATOMUSDT":{
+        "COIN":"ATOM",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "CHZUSDT":{
+        "COIN":"CHZ",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "SNXUSDT":{
+        "COIN":"SNX",
+        "SIGNAL": "SELL",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    },
+    "EGLDUSDT":{
+        "COIN":"EGLD",
+        "SIGNAL": "BUY",
+        "PRICE": "12",
+        "EntryPrice" : "null"
+    }
+}
